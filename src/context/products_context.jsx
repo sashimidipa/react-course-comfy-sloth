@@ -40,14 +40,12 @@ export const ProductsProvider = ({ children }) => {
       try {
         const db = getFirestore()
         const url = '/products/' + id + '/itemDetail'
-        console.log(url)
         const prod = db.collection(url)
         prod.get()
         .then((res)=> {
           const singleProduct = res.docs.map((doc) => {
               return {id: doc.id, ...doc.data()}
             })
-            console.log(singleProduct)
             dispatch({ type: GET_SINGLE_PRODUCT_SUCCESS, payload: singleProduct[0] })
           })
       } catch (error) {
