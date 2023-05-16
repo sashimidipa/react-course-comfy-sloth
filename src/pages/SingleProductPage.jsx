@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useProductsContext } from '../context/products_context'
-import { single_product_url as url } from '../utils/constants'
 import { formatPrice } from '../utils/helpers'
 import {
   Loading,
@@ -28,9 +27,9 @@ const SingleProductPage = () => {
           navigate('/')
         },3000)
       } 
-    },[])
+    },[error])
     useEffect(()=>{
-      fetchSingleProduct(`${url}${id}`)
+      fetchSingleProduct(`${id}`)
     },[id])
     
     if(loading){

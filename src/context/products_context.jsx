@@ -1,7 +1,6 @@
-import axios from 'axios'
 import React, { useContext, useEffect, useReducer } from 'react'
 import reducer from '../reducers/products_reducer'
-import { products_url as url } from '../utils/constants'
+import {getFirestore} from '../firebase/config'
 import {
   SIDEBAR_OPEN,
   SIDEBAR_CLOSE,
@@ -36,29 +35,42 @@ export const ProductsProvider = ({ children }) => {
     dispatch({ type: SIDEBAR_CLOSE })
   }
 
-  const fetchProducts = async (url) => {
-    dispatch({ type: GET_PRODUCTS_BEGIN })
-    try {
-      const response = await axios.get(url)
-      const products = response.data
-      dispatch({ type: GET_PRODUCTS_SUCCESS, payload: products })
-    } catch (error) {
-      dispatch({ type: GET_PRODUCTS_ERROR })
-    }
-  }
-  const fetchSingleProduct = async (url) => {
+  const fetchSingleProduct = (id) => {
     dispatch({ type: GET_SINGLE_PRODUCT_BEGIN })
-    try {
-      const response = await axios.get(url)
-      const singleProduct = response.data
-      dispatch({ type: GET_SINGLE_PRODUCT_SUCCESS, payload: singleProduct })
-    } catch (error) {
-      dispatch({ type: GET_SINGLE_PRODUCT_ERROR })
-    }
+      try {
+        const db = getFirestore()
+        const url = '/products/' + id + '/itemDetail'
+        console.log(url)
+        const prod = db.collection(url)
+        prod.get()
+        .then((res)=> {
+          const singleProduct = res.docs.map((doc) => {
+              return {id: doc.id, ...doc.data()}
+            })
+            console.log(singleProduct)
+            dispatch({ type: GET_SINGLE_PRODUCT_SUCCESS, payload: singleProduct[0] })
+          })
+      } catch (error) {
+        dispatch({ type: GET_SINGLE_PRODUCT_ERROR })
+      }
   }
 
   useEffect(() => {
-    fetchProducts(url)
+  dispatch({ type: GET_PRODUCTS_BEGIN })
+    try {
+      const db = getFirestore()
+      const prod = db.collection('products')
+      prod.get()
+        .then((res)=> {
+          const newItem = res.docs.map((doc) => {
+            return {id: doc.id, ...doc.data()}
+          })
+          dispatch({ type: GET_PRODUCTS_SUCCESS, payload: newItem })
+          
+        })
+    } catch (error) {
+      dispatch({ type: GET_PRODUCTS_ERROR })
+    }
   }, [])
 
   return (
