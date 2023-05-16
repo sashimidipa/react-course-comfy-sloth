@@ -1,7 +1,7 @@
 # react-course-comfy-sloth
  Comfy Sloth is an e-commerce with which you can design your comfort zone.
 
-NOTE: To run the app without problems, do not use the "npm start" command, if this is used, the payments part of the app will not work since it will not load the functions in Netlify-CLI, preferably use the "npm run dev" command or directly in the deploy.
+NOTE: To run the app without problems, do not use the "npm start" command, if this is used, the payments part of the app will not work since it will not load the functions in Netlify-CLI, preferably use the "npm run dev" command or directly in the deploy "https://comfy-sloth-sd.netlify.app/".
 
 You can navigate through the different pages, on the Product page you can filter by search, by category, by company, by price, by color and by whether they have free shipping, you can also order them by lowest and highest price and alphabetically from A-Z and Z-A; the products are fetched from a database in Firebase called "products" which in turn has a nested database called "itemDetail" that contains the view data for each individual product.
 
